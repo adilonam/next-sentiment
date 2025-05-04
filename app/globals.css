@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
+
+
+@theme {
+    --color-sentiment-background: #F4F4F4;
+    --color-sentiment-text: #212121;
+    --color-sentiment-positive: #4CAF50;
+    --color-scolor-entiment-negative: #F44336;
+    --color-sentiment-neutral: #FFC107;
+}

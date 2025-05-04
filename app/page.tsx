@@ -61,24 +61,32 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex justify-end mb-4">
+    <div className="min-h-screen bg-sentiment-background dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+      <div className="max-w-3xl mx-auto space-y-8">
+        <div className="flex justify-end">
           <ThemeToggle />
         </div>
 
         <Header />
         
-        <URLInput 
-          url={url}
-          setUrl={setUrl}
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
-        />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <URLInput 
+            url={url}
+            setUrl={setUrl}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+        </div>
 
-        <ProgressLogs logs={logs} />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <ProgressLogs logs={logs} />
+        </div>
 
-        {result && <SentimentResults result={result} />}
+        {result && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <SentimentResults result={result} />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,35 +1,59 @@
-import { SentimentResult } from '../utils/sentiment';
+import type { SentimentResult } from '../utils/sentiment';
 
-interface SentimentResultsProps {
+type Props = {
   result: SentimentResult;
-}
+};
 
-export const SentimentResults = ({ result }: SentimentResultsProps) => {
+export function SentimentResults({ result }: Props) {
   return (
-    <div className="mt-8 space-y-6">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700/50">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Sentiment Analysis Results</h2>
-        
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="text-center p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{result.positive}%</div>
-            <div className="text-sm text-green-700 dark:text-green-300">Positive</div>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-sentiment-text dark:text-white">Analysis Results</h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <span className="text-sentiment-text dark:text-white font-medium">Positive</span>
+            <span className="text-sentiment-positive font-bold">{result.positive}%</span>
           </div>
-          <div className="text-center p-4 bg-red-50 dark:bg-red-900/30 rounded-lg">
-            <div className="text-2xl font-bold text-red-600 dark:text-red-400">{result.negative}%</div>
-            <div className="text-sm text-red-700 dark:text-red-300">Negative</div>
-          </div>
-          <div className="text-center p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-            <div className="text-2xl font-bold text-gray-600 dark:text-gray-400">{result.neutral}%</div>
-            <div className="text-sm text-gray-700 dark:text-gray-300">Neutral</div>
+          <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-sentiment-positive rounded-full h-2 transition-all duration-500" 
+              style={{ width: `${result.positive}%` }}
+            />
           </div>
         </div>
 
-        <div className="mt-4">
-          <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Summary</h3>
-          <p className="text-gray-700 dark:text-gray-300">{result.summary}</p>
+        <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <span className="text-sentiment-text dark:text-white font-medium">Neutral</span>
+            <span className="text-sentiment-neutral font-bold">{result.neutral}%</span>
+          </div>
+          <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-sentiment-neutral rounded-full h-2 transition-all duration-500" 
+              style={{ width: `${result.neutral}%` }}
+            />
+          </div>
         </div>
+
+        <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <span className="text-sentiment-text dark:text-white font-medium">Negative</span>
+            <span className="text-sentiment-negative font-bold">{result.negative}%</span>
+          </div>
+          <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-sentiment-negative rounded-full h-2 transition-all duration-500" 
+              style={{ width: `${result.negative}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+        <h3 className="text-lg font-semibold text-sentiment-text dark:text-white mb-2">Summary</h3>
+        <p className="text-sentiment-text dark:text-gray-300">{result.summary}</p>
       </div>
     </div>
   );
-};
+}
