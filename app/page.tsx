@@ -6,6 +6,7 @@ import { Header } from '../components/Header';
 import { URLInput } from '../components/URLInput';
 import { SentimentResults } from '../components/SentimentResults';
 import { ProgressLogs } from '../components/ProgressLogs';
+import { Comments } from '../components/Comments';
 import type { SentimentResult } from '../utils/sentiment';
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<SentimentResult | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
+  const [comments, setComments] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -28,12 +30,28 @@ export default function Home() {
     setIsLoading(true);
     setResult(null);
     setLogs([]);
+    setComments([]);
     
     // Mock analysis process with simulated delays
     addLog('1. Fetching webpage content...');
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     addLog('2. Extracting comments and reviews...');
+    const mockComments = [
+      "This product is amazing! The interface is so intuitive.",
+      "I'm having some issues with the mobile version, but desktop works fine.",
+      "Customer support was really helpful in resolving my issue.",
+      "Not what I expected. The features are limited.",
+      "Great improvement from the previous version!",
+      "Would be better with dark mode support.",
+      "Been using this for 6 months, very satisfied.",
+      "The new update broke some functionality.",
+      "Best tool I've used for this purpose.",
+      "A bit expensive but worth the investment.",
+      "The documentation could be clearer.",
+      "Really impressed with the performance."
+    ];
+    setComments(mockComments);
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     addLog('3. Processing text data...');
@@ -78,8 +96,14 @@ export default function Home() {
           />
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <ProgressLogs logs={logs} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <ProgressLogs logs={logs} />
+          </div>
+
+          {comments.length > 0 && (
+            <Comments comments={comments} />
+          )}
         </div>
 
         {result && (
