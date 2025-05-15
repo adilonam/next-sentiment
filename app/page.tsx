@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Header } from '../components/Header';
 import { URLInput } from '../components/URLInput';
@@ -8,6 +9,12 @@ import { SentimentResults } from '../components/SentimentResults';
 import { ProgressLogs } from '../components/ProgressLogs';
 import { Comments } from '../components/Comments';
 import type { SentimentResult } from '../utils/sentiment';
+
+// Interface for the API response
+interface CommentResponse {
+  comments: string[];
+  total_comments: number;
+}
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -32,46 +39,48 @@ export default function Home() {
     setLogs([]);
     setComments([]);
     
-    // Mock analysis process with simulated delays
-    addLog('1. Fetching webpage content...');
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    addLog('2. Extracting comments and reviews...');
-    const mockComments = [
-      "This product is amazing! The interface is so intuitive.",
-      "I'm having some issues with the mobile version, but desktop works fine.",
-      "Customer support was really helpful in resolving my issue.",
-      "Not what I expected. The features are limited.",
-      "Great improvement from the previous version!",
-      "Would be better with dark mode support.",
-      "Been using this for 6 months, very satisfied.",
-      "The new update broke some functionality.",
-      "Best tool I've used for this purpose.",
-      "A bit expensive but worth the investment.",
-      "The documentation could be clearer.",
-      "Really impressed with the performance."
-    ];
-    setComments(mockComments);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    addLog('3. Processing text data...');
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    
-    addLog('4. Analyzing sentiment with AI model...');
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    addLog('5. Generating summary...');
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    setResult({
-      positive: 45,
-      negative: 20,
-      neutral: 35,
-      summary: "The comments show a generally positive sentiment with some concerns. Users appreciate the product's features but have noted some areas for improvement in the user interface."
-    });
-    
-    addLog('✓ Analysis complete!');
-    setIsLoading(false);
+    try {
+      // Start the analysis process with real API calls
+      addLog('1. Fetching webpage content...');
+      
+      // Use local proxy to avoid CORS issues
+      // No need for environment variable anymore as we're using the local proxy
+      
+      addLog('2. Extracting comments and reviews...');
+      // Make the API call to get comments through our proxy
+      const response = await axios.post<CommentResponse>(
+        `/api/scrape-comments`, 
+        { url }
+      );
+      
+      // Set the comments from the API response
+      setComments(response.data.comments);
+      addLog(`Found ${response.data.total_comments} comments`);
+      
+      addLog('3. Processing text data...');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      addLog('4. Analyzing sentiment with AI model...');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      addLog('5. Generating summary...');
+      
+      // For now, we'll still use mock sentiment results
+      // In a real app, you would get these from another API call
+      setResult({
+        positive: 45,
+        negative: 20,
+        neutral: 35,
+        summary: "The comments show a generally positive sentiment with some concerns. Users appreciate the product's features but have noted some areas for improvement in the user interface."
+      });
+      
+      addLog('✓ Analysis complete!');
+    } catch (error) {
+      console.error('Error analyzing URL:', error);
+      addLog('❌ Error: Failed to analyze URL. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!mounted) {

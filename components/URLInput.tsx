@@ -8,6 +8,13 @@ type Props = {
 };
 
 export function URLInput({ url, setUrl, onSubmit, isLoading }: Props) {
+
+  const testUrl = "https://www.hespress.com/%d9%83%d8%b4%d9%81-%d9%82%d9%8a%d9%85%d8%a9-%d8%a7%d9%84%d8%af%d8%b9%d9%85-%d8%a7%d9%84%d8%a7%d8%b3%d8%aa%d8%ab%d9%86%d8%a7%d8%a6%d9%8a-%d9%84%d8%a7%d8%b3%d8%aa%d9%8a%d8%b1%d8%a7%d8%af-%d8%a7%d9%84-1538604.html";
+  
+  const handleTestClick = () => {
+    setUrl(testUrl);
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
@@ -36,6 +43,18 @@ export function URLInput({ url, setUrl, onSubmit, isLoading }: Props) {
           ) : (
             'Analyze Sentiment'
           )}
+        </button>
+      </div>
+      
+  
+      <div className="flex justify-center">
+        <button
+          type="button"
+          onClick={handleTestClick}
+          disabled={isLoading}
+          className="btn btn-secondary text-sm"
+        >
+          Test with Example URL
         </button>
       </div>
     </form>
