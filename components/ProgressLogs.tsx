@@ -12,7 +12,7 @@ export function ProgressLogs({ logs }: Props) {
             key={index}
             className="text-sentiment-text dark:text-gray-300 py-1  animate-fade-in"
             style={{
-              animationDelay: `${index * 100}ms`
+              animationDelay: `${index * 100}ms`,
             }}
           >
             {log}

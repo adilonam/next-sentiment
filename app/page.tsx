@@ -8,12 +8,7 @@ import { URLInput } from '../components/URLInput';
 import { ProgressLogs } from '../components/ProgressLogs';
 import { Comments } from '../components/Comments';
 import { LiveSentimentStats } from '../components/LiveSentimentStats';
-
-// Interface for the API response
-interface CommentResponse {
-  comments: string[];
-  total_comments: number;
-}
+import { CommentResponse, SentimentStats } from '@/utils/types';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -21,6 +16,13 @@ export default function Home() {
   const [logs, setLogs] = useState<string[]>([]);
   const [comments, setComments] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [stats, setStats] = useState<SentimentStats>({
+    positive: 0,
+    neutral: 0,
+    negative: 0,
+    total: 0,
+    processed: 0,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -35,39 +37,44 @@ export default function Home() {
     setIsLoading(true);
     setLogs([]);
     setComments([]);
-    
+
     try {
       // Start the analysis process with real API calls
       addLog('1. Fetching webpage content...');
-      
+
       // Use local proxy to avoid CORS issues
       // No need for environment variable anymore as we're using the local proxy
-      
+
       addLog('2. Extracting comments and reviews...');
       // Make the API call to get comments through our proxy
-      const response = await axios.post<CommentResponse>(
-        `/fast-api/scrape-comments`, 
-        { url }
-      );
-      
+      const response = await axios.post<CommentResponse>(`/fast-api/scrape-comments`, { url });
+
       // Set the comments from the API response
       setComments(response.data.comments);
       addLog(`Found ${response.data.total_comments} comments`);
-      
+
+      // Set the total number of comments in stats
+      setStats(prevStats => ({
+        ...prevStats,
+        total: response.data.total_comments,
+        processed: 0,
+        positive: 0,
+        neutral: 0,
+        negative: 0,
+      }));
+
       addLog('3. Processing text data...');
-      
+
       // Display comments first, then process them individually in the CommentSentiment component
-      
+
       addLog('4. Analyzing comment sentiment with AI model...');
       addLog('Individual comments are being analyzed in real-time...');
-      
+
       addLog('5. Generating overall summary...');
-      
+
       // We'll calculate the overall result after comments are processed individually
       // The LiveSentimentStats component will track individual results in real-time
-      
-    
-      
+
       addLog('✓ Analysis complete!');
     } catch (error) {
       console.error('Error analyzing URL:', error);
@@ -89,38 +96,36 @@ export default function Home() {
         </div>
 
         <Header />
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-          <URLInput 
-            url={url}
-            setUrl={setUrl}
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-          />
+          <URLInput url={url} setUrl={setUrl} onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full">
             <ProgressLogs logs={logs} />
           </div>
 
           {comments.length > 0 && (
-            <Comments comments={comments} />
+            <div className="w-full">
+              <Comments comments={comments} setStats={setStats} />
+            </div>
           )}
         </div>
-        
+
         {comments.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <LiveSentimentStats comments={comments} />
+            <LiveSentimentStats stats={stats} />
           </div>
         )}
 
-        
         {isLoading && comments.length === 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sentiment-primary"></div>
-              <p className="mt-2 text-sentiment-text dark:text-white">Fetching and analyzing comments...</p>
+              <p className="mt-2 text-sentiment-text dark:text-white">
+                Fetching and analyzing comments...
+              </p>
             </div>
           </div>
         )}

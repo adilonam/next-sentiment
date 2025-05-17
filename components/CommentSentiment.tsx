@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CommentSentimentClassification } from '../utils/sentiment';
+import { CommentSentimentClassification, SentimentStats } from '../utils/types';
 
 interface CommentSentimentProps {
   comment: string;
+  setStats: React.Dispatch<React.SetStateAction<SentimentStats>>;
 }
 
-export const CommentSentiment = ({ comment }: CommentSentimentProps) => {
+export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) => {
   const [sentiment, setSentiment] = useState<CommentSentimentClassification | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,25 +16,32 @@ export const CommentSentiment = ({ comment }: CommentSentimentProps) => {
     const classifyComment = async () => {
       try {
         setIsLoading(true);
-        
+
         // Make a direct API call to the comment classification endpoint
         const response = await axios.post<CommentSentimentClassification>(
           '/fast-api/comment-classification',
           { comment }
         );
-        
+
         const result = response.data;
         setSentiment(result);
-        
-        // Dispatch a custom event when sentiment is processed
-        const event = new CustomEvent('comment-sentiment-processed', {
-          detail: {
-            sentiment: result.sentiment,
-            results: result.results,
-            comment
+
+        // Update the sentiment stats when we get a result
+        setStats(prevStats => {
+          // Increment the processed count
+          const updatedStats = { ...prevStats, processed: prevStats.processed + 1 };
+
+          // Increment the corresponding sentiment count
+          if (result.sentiment === 'positive') {
+            updatedStats.positive += 1;
+          } else if (result.sentiment === 'negative') {
+            updatedStats.negative += 1;
+          } else {
+            updatedStats.neutral += 1;
           }
+
+          return updatedStats;
         });
-        window.dispatchEvent(event);
       } catch (err) {
         console.error('Error classifying comment:', err);
         if (axios.isAxiosError(err)) {
@@ -51,9 +59,10 @@ export const CommentSentiment = ({ comment }: CommentSentimentProps) => {
         setIsLoading(false);
       }
     };
-
-    classifyComment();
-  }, [comment]);
+    if (comment) {
+      classifyComment();
+    }
+  }, [comment, setStats]);
 
   const getSentimentColor = (label: string) => {
     switch (label) {
@@ -76,9 +85,7 @@ export const CommentSentiment = ({ comment }: CommentSentimentProps) => {
   }
 
   if (error) {
-    return (
-      <div className="mt-2 text-sm text-red-500">{error}</div>
-    );
+    return <div className="mt-2 text-sm text-red-500">{error}</div>;
   }
 
   if (!sentiment) return null;
@@ -86,11 +93,13 @@ export const CommentSentiment = ({ comment }: CommentSentimentProps) => {
   return (
     <div className="mt-2">
       <div className="flex items-center space-x-3">
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSentimentColor(sentiment.sentiment)}`}>
+        <span
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSentimentColor(sentiment.sentiment)}`}
+        >
           {sentiment.sentiment.toUpperCase()}
         </span>
         <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
-          {sentiment.results.map((result) => (
+          {sentiment.results.map(result => (
             <div key={result.label} className="flex items-center">
               <span className="font-medium mr-1">{result.label}:</span>
               <span>{Math.round(result.score * 100)}%</span>

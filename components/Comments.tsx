@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { CommentSentiment } from './CommentSentiment';
+import { SentimentStats } from '@/utils/types';
 
 interface CommentsProps {
   comments: string[];
+  setStats: React.Dispatch<React.SetStateAction<SentimentStats>>;
 }
 
-export const Comments = ({ comments }: CommentsProps) => {
+export const Comments = ({ comments, setStats }: CommentsProps) => {
   const [visibleComments, setVisibleComments] = useState<string[]>([]);
 
   useEffect(() => {
     // Reset visible comments when new comments array is received
     setVisibleComments([]);
-    
+
     // Add comments one by one with a delay
     comments.forEach((comment, index) => {
       setTimeout(() => {
@@ -33,7 +35,7 @@ export const Comments = ({ comments }: CommentsProps) => {
           >
             <div className="mb-2 text-sm">{comment}</div>
             <div className="border-t border-gray-200 dark:border-gray-600 pt-2">
-              <CommentSentiment comment={comment} />
+              <CommentSentiment comment={comment} setStats={setStats} />
             </div>
           </div>
         ))}
