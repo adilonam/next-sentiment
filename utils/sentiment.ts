@@ -1,6 +1,13 @@
-export interface SentimentResult {
-  positive: number;
-  negative: number;
-  neutral: number;
-  summary: string;
+
+
+export interface SentimentClassificationResult {
+  rank: number;
+  label: string;
+  score: number;
+}
+
+export interface CommentSentimentClassification {
+  results: SentimentClassificationResult[];
+  sentiment: string;
+  execution_time: number;
 }

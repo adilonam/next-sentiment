@@ -5,10 +5,9 @@ import axios from 'axios';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Header } from '../components/Header';
 import { URLInput } from '../components/URLInput';
-import { SentimentResults } from '../components/SentimentResults';
 import { ProgressLogs } from '../components/ProgressLogs';
 import { Comments } from '../components/Comments';
-import type { SentimentResult } from '../utils/sentiment';
+import { LiveSentimentStats } from '../components/LiveSentimentStats';
 
 // Interface for the API response
 interface CommentResponse {
@@ -19,7 +18,6 @@ interface CommentResponse {
 export default function Home() {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<SentimentResult | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [comments, setComments] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -35,7 +33,6 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setResult(null);
     setLogs([]);
     setComments([]);
     
@@ -49,7 +46,7 @@ export default function Home() {
       addLog('2. Extracting comments and reviews...');
       // Make the API call to get comments through our proxy
       const response = await axios.post<CommentResponse>(
-        `/api/scrape-comments`, 
+        `/fast-api/scrape-comments`, 
         { url }
       );
       
@@ -58,21 +55,18 @@ export default function Home() {
       addLog(`Found ${response.data.total_comments} comments`);
       
       addLog('3. Processing text data...');
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      addLog('4. Analyzing sentiment with AI model...');
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Display comments first, then process them individually in the CommentSentiment component
       
-      addLog('5. Generating summary...');
+      addLog('4. Analyzing comment sentiment with AI model...');
+      addLog('Individual comments are being analyzed in real-time...');
       
-      // For now, we'll still use mock sentiment results
-      // In a real app, you would get these from another API call
-      setResult({
-        positive: 45,
-        negative: 20,
-        neutral: 35,
-        summary: "The comments show a generally positive sentiment with some concerns. Users appreciate the product's features but have noted some areas for improvement in the user interface."
-      });
+      addLog('5. Generating overall summary...');
+      
+      // We'll calculate the overall result after comments are processed individually
+      // The LiveSentimentStats component will track individual results in real-time
+      
+    
       
       addLog('✓ Analysis complete!');
     } catch (error) {
@@ -114,10 +108,20 @@ export default function Home() {
             <Comments comments={comments} />
           )}
         </div>
-
-        {result && (
+        
+        {comments.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <SentimentResults result={result} />
+            <LiveSentimentStats comments={comments} />
+          </div>
+        )}
+
+        
+        {isLoading && comments.length === 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sentiment-primary"></div>
+              <p className="mt-2 text-sentiment-text dark:text-white">Fetching and analyzing comments...</p>
+            </div>
           </div>
         )}
       </div>
