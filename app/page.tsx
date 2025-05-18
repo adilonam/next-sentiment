@@ -101,7 +101,7 @@ export default function Home() {
           <URLInput url={url} setUrl={setUrl} onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col gap-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full">
             <ProgressLogs logs={logs} />
           </div>
