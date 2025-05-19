@@ -14,6 +14,8 @@ export interface SentimentStats {
   positive: number;
   neutral: number;
   negative: number;
+  veryPositive: number; // New
+  veryNegative: number; // New
   total: number;
   processed: number;
 }

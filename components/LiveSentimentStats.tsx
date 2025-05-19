@@ -28,6 +28,12 @@ export const LiveSentimentStats = ({ stats }: { stats: SentimentStats }) => {
       </div>
 
       <div className="grid grid-cols-3 gap-2">
+        <div className="bg-sky-100 dark:bg-sky-900/20 p-3 rounded-lg text-center">
+          <div className="text-sky-800 dark:text-sky-300 text-lg font-bold">
+            {stats.veryPositive}
+          </div>
+          <div className="text-sm text-sky-700 dark:text-sky-400">Very Positive</div>
+        </div>
         <div className="bg-green-100 dark:bg-green-900/20 p-3 rounded-lg text-center">
           <div className="text-green-800 dark:text-green-300 text-lg font-bold">
             {stats.positive}
@@ -41,6 +47,12 @@ export const LiveSentimentStats = ({ stats }: { stats: SentimentStats }) => {
         <div className="bg-red-100 dark:bg-red-900/20 p-3 rounded-lg text-center">
           <div className="text-red-800 dark:text-red-300 text-lg font-bold">{stats.negative}</div>
           <div className="text-sm text-red-700 dark:text-red-400">Negative</div>
+        </div>
+        <div className="bg-rose-100 dark:bg-rose-900/20 p-3 rounded-lg text-center">
+          <div className="text-rose-800 dark:text-rose-300 text-lg font-bold">
+            {stats.veryNegative}
+          </div>
+          <div className="text-sm text-rose-700 dark:text-rose-400">Very Negative</div>
         </div>
       </div>
     </div>

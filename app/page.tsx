@@ -20,6 +20,8 @@ export default function Home() {
     positive: 0,
     neutral: 0,
     negative: 0,
+    veryPositive: 0, // New
+    veryNegative: 0, // New
     total: 0,
     processed: 0,
   });
@@ -61,6 +63,8 @@ export default function Home() {
         positive: 0,
         neutral: 0,
         negative: 0,
+        veryPositive: 0, // New
+        veryNegative: 0, // New
       }));
 
       addLog('3. Processing text data...');

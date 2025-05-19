@@ -36,8 +36,12 @@ export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) =
             updatedStats.positive += 1;
           } else if (result.sentiment === 'negative') {
             updatedStats.negative += 1;
-          } else {
+          } else if (result.sentiment === 'neutral') {
             updatedStats.neutral += 1;
+          } else if (result.sentiment === 'Very Positive') { // New
+            updatedStats.veryPositive += 1;
+          } else if (result.sentiment === 'Very Negative') { // New
+            updatedStats.veryNegative += 1;
           }
 
           return updatedStats;
@@ -70,6 +74,10 @@ export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) =
         return 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300';
       case 'negative':
         return 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300';
+      case 'Very Positive': // New
+        return 'bg-sky-100 dark:bg-sky-900/20 text-sky-800 dark:text-sky-300'; // Example color
+      case 'Very Negative': // New
+        return 'bg-rose-100 dark:bg-rose-900/20 text-rose-800 dark:text-rose-300'; // Example color
       case 'neutral':
       default:
         return 'bg-gray-100 dark:bg-gray-700/50 text-gray-800 dark:text-gray-300';
