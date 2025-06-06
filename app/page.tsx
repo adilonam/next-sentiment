@@ -9,6 +9,7 @@ import { ProgressLogs } from '../components/ProgressLogs';
 import { Comments } from '../components/Comments';
 import { LiveSentimentStats } from '../components/LiveSentimentStats';
 import { CommentResponse, SentimentStats } from '@/utils/types';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -23,6 +24,8 @@ export default function Home() {
     total: 0,
     processed: 0,
   });
+  
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -34,6 +37,12 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isAuthenticated) {
+      addLog('❌ Please sign in to analyze URLs.');
+      return;
+    }
+    
     setIsLoading(true);
     setLogs([]);
     setComments([]);
@@ -98,6 +107,22 @@ export default function Home() {
         <Header />
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          {!isAuthenticated && !authLoading && (
+            <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p className="text-blue-800 dark:text-blue-200 text-center">
+                <strong>Sign in required:</strong> Please sign in to analyze website sentiment and access all features.
+              </p>
+            </div>
+          )}
+          
+          {isAuthenticated && (
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <p className="text-green-800 dark:text-green-200 text-center">
+                <strong>Welcome back, {user?.name || user?.email}!</strong> You can now analyze website sentiment.
+              </p>
+            </div>
+          )}
+          
           <URLInput url={url} setUrl={setUrl} onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
 
