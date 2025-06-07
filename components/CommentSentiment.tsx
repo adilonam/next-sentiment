@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CommentSentimentClassification, SentimentStats } from '../utils/types';
+import { Comment, CommentClassificationResponse, SentimentStats } from '../utils/types';
 
 interface CommentSentimentProps {
-  comment: string;
+  comment: Comment;
   setStats: React.Dispatch<React.SetStateAction<SentimentStats>>;
+  accessToken?: string;
 }
 
-export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) => {
-  const [sentiment, setSentiment] = useState<CommentSentimentClassification | null>(null);
+export const CommentSentiment = ({ comment, setStats, accessToken }: CommentSentimentProps) => {
+  const [sentiment, setSentiment] = useState<CommentClassificationResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,10 +18,22 @@ export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) =
       try {
         setIsLoading(true);
 
-        // Make a direct API call to the comment classification endpoint
-        const response = await axios.post<CommentSentimentClassification>(
-          '/fast-api/comment-classification',
-          { comment }
+        // Make API call to the new comment classification endpoint
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        
+        if (accessToken) {
+          headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+
+        const response = await axios.post<CommentClassificationResponse>(
+          '/api/fastapi/comment-classification',
+          { 
+            commentId: comment.id,
+            modelName: "default_model"
+          },
+          { headers }
         );
 
         const result = response.data;
@@ -31,10 +44,11 @@ export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) =
           // Increment the processed count
           const updatedStats = { ...prevStats, processed: prevStats.processed + 1 };
 
-          // Increment the corresponding sentiment count
-          if (result.sentiment === 'positive') {
+          // Increment the corresponding sentiment count based on the API response
+          const sentimentValue = result.sentimentAnalysisResult.sentiment.toLowerCase();
+          if (sentimentValue === 'positive') {
             updatedStats.positive += 1;
-          } else if (result.sentiment === 'negative') {
+          } else if (sentimentValue === 'negative') {
             updatedStats.negative += 1;
           } else {
             updatedStats.neutral += 1;
@@ -59,10 +73,10 @@ export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) =
         setIsLoading(false);
       }
     };
-    if (comment) {
+    if (comment && comment.id) {
       classifyComment();
     }
-  }, [comment, setStats]);
+  }, [comment, setStats, accessToken]);
 
   const getSentimentColor = (label: string) => {
     switch (label) {
@@ -94,18 +108,30 @@ export const CommentSentiment = ({ comment, setStats }: CommentSentimentProps) =
     <div className="mt-2">
       <div className="flex flex-col items-center space-x-2">
         <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSentimentColor(sentiment.sentiment)}`}
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSentimentColor(sentiment.sentimentAnalysisResult.sentiment.toLowerCase())}`}
         >
-          {sentiment.sentiment.toUpperCase()}
+          {sentiment.sentimentAnalysisResult.sentiment.toUpperCase()}
         </span>
         <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
-          {sentiment.results.map(result => (
-            <div key={result.label} className="flex items-center">
-              <span className="font-medium mr-1">{result.label}:</span>
-              <span>{Math.round(result.score * 100)}%</span>
-              {result.rank < sentiment.results.length && <span className="mx-1">•</span>}
-            </div>
-          ))}
+          <div className="flex items-center">
+            <span className="font-medium mr-1">Confidence:</span>
+            <span>{Math.round(sentiment.sentimentAnalysisResult.confidenceScore * 100)}%</span>
+          </div>
+          <span className="mx-1">•</span>
+          <div className="flex items-center">
+            <span className="font-medium mr-1">Positive:</span>
+            <span>{Math.round(sentiment.sentimentAnalysisResult.positiveScore * 100)}%</span>
+          </div>
+          <span className="mx-1">•</span>
+          <div className="flex items-center">
+            <span className="font-medium mr-1">Negative:</span>
+            <span>{Math.round(sentiment.sentimentAnalysisResult.negativeScore * 100)}%</span>
+          </div>
+          <span className="mx-1">•</span>
+          <div className="flex items-center">
+            <span className="font-medium mr-1">Neutral:</span>
+            <span>{Math.round(sentiment.sentimentAnalysisResult.neutralScore * 100)}%</span>
+          </div>
         </div>
       </div>
     </div>

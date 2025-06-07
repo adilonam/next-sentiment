@@ -162,6 +162,11 @@ export const authOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
+        // If there's a refresh token error, clear the session to force logout
+        if (token.error === 'RefreshAccessTokenError') {
+          return {} as Session // Return empty session to trigger logout
+        }
+        
         session.accessToken = token.accessToken
         session.refreshToken = token.refreshToken
         session.user = token.user as any

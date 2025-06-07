@@ -8,3 +8,32 @@
   --color-scolor-entiment-negative: #f44336;
   --color-sentiment-neutral: #ffc107;
 }
+
+/* Custom styles for improved design */
+.input {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-blue-400;
+}
+
+.input:disabled {
+  @apply bg-gray-50 text-gray-400 cursor-not-allowed dark:bg-gray-900 dark:text-gray-600;
+}
+
+.btn {
+  @apply px-6 py-3 rounded-xl font-medium transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98];
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:from-blue-700 hover:to-purple-700 focus:ring-blue-500 disabled:from-gray-400 disabled:to-gray-500 disabled:hover:from-gray-400 disabled:hover:to-gray-500 disabled:transform-none;
+}
+
+.btn-secondary {
+  @apply bg-white border border-gray-300 text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-gray-500 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200 disabled:transform-none dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700;
+}
+
+.form-card {
+  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 backdrop-blur-sm;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { CommentSentiment } from './CommentSentiment';
-import { SentimentStats } from '@/utils/types';
+import { SentimentStats, Comment } from '@/utils/types';
 
 interface CommentsProps {
-  comments: string[];
+  comments: Comment[];
   setStats: React.Dispatch<React.SetStateAction<SentimentStats>>;
+  accessToken?: string;
 }
 
-export const Comments = ({ comments, setStats }: CommentsProps) => {
-  const [visibleComments, setVisibleComments] = useState<string[]>([]);
+export const Comments = ({ comments, setStats, accessToken }: CommentsProps) => {
+  const [visibleComments, setVisibleComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     // Reset visible comments when new comments array is received
@@ -30,12 +31,12 @@ export const Comments = ({ comments, setStats }: CommentsProps) => {
       <div className="space-y-4 h-[300px] overflow-y-auto pr-2">
         {visibleComments.map((comment, index) => (
           <div
-            key={index}
+            key={comment.id}
             className="text-sentiment-text dark:text-gray-300 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-fade-in transition-all duration-300"
           >
-            <div className="mb-2 text-sm">{comment}</div>
+            <div className="mb-2 text-sm">{comment.content}</div>
             <div className="border-t border-gray-200 dark:border-gray-600 pt-2">
-              <CommentSentiment comment={comment} setStats={setStats} />
+              <CommentSentiment comment={comment} setStats={setStats} accessToken={accessToken} />
             </div>
           </div>
         ))}
