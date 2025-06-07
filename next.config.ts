@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/fastapi/:path*',
-        destination: `${process.env.BACKEND_API_URL}/api/fastapi/:path*`,
+        source: '/api/gateway/:path*',
+        destination: `${process.env.BACKEND_API_URL}/api/:path*`,
       },
     ];
   },

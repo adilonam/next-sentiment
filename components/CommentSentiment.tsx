@@ -28,7 +28,7 @@ export const CommentSentiment = ({ comment, setStats, accessToken }: CommentSent
         }
 
         const response = await axios.post<CommentClassificationResponse>(
-          '/api/fastapi/comment-classification',
+          '/api/gateway/fastapi/comment-classification',
           { 
             commentId: comment.id,
             modelName: "default_model"
