@@ -14,11 +14,9 @@ import {
   Cell,
   LineChart,
   Line,
-  AreaChart,
-  Area,
   ComposedChart
 } from 'recharts';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 // Mock data for Hespress sentiment analysis
 const mockSentimentData = [
@@ -81,7 +79,6 @@ const mockGeographicData = [
   { region: 'طنجة', comments: 210, avgSentiment: 0.0 },
 ];
 
-const COLORS = ['#10B981', '#EF4444', '#6B7280'];
 
 interface SentimentDashboardProps {
   className?: string;

@@ -229,7 +229,7 @@ export default function Home() {
                         Welcome back, {user?.name || user?.email}!
                       </p>
                       <p className="text-green-700 dark:text-green-300 text-sm">
-                        You're ready to analyze website sentiment and comments.
+                        You&apos;re ready to analyze website sentiment and comments.
                       </p>
                     </div>
                   </div>

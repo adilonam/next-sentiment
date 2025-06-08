@@ -29,7 +29,7 @@ export const Comments = ({ comments, setStats, accessToken }: CommentsProps) => 
         Scraped Comments
       </h3>
       <div className="space-y-4 h-[300px] overflow-y-auto pr-2">
-        {visibleComments.map((comment, index) => (
+        {visibleComments.map((comment) => (
           <div
             key={comment.id}
             className="text-sentiment-text dark:text-gray-300 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-fade-in transition-all duration-300"

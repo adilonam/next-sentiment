@@ -44,7 +44,7 @@ export default function SignInForm() {
           setError('Sign in failed. Please try again.')
         }
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
