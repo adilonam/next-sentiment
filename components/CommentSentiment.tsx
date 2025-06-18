@@ -22,16 +22,16 @@ export const CommentSentiment = ({ comment, setStats, accessToken }: CommentSent
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',
         };
-        
+
         if (accessToken) {
           headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
         const response = await axios.post<CommentClassificationResponse>(
           '/api/gateway/fastapi/comment-classification',
-          { 
+          {
             commentId: comment.id,
-            modelName: "default_model"
+            modelName: 'default_model',
           },
           { headers }
         );

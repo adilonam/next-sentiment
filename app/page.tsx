@@ -9,6 +9,7 @@ import { ProgressLogs } from '../components/ProgressLogs';
 import { Comments } from '../components/Comments';
 import { LiveSentimentStats } from '../components/LiveSentimentStats';
 import { SentimentDashboard } from '../components/SentimentDashboard';
+import AuthStatus from '../components/auth/AuthStatus';
 import { CommentResponse, SentimentStats, Comment } from '@/utils/types';
 import { useAuth } from '../hooks/useAuth';
 
@@ -27,7 +28,7 @@ export default function Home() {
     total: 0,
     processed: 0,
   });
-  
+
   const { user, isAuthenticated, isLoading: authLoading, accessToken } = useAuth();
 
   useEffect(() => {
@@ -40,17 +41,17 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isAuthenticated) {
       addLog('❌ Please sign in to analyze URLs.');
       return;
     }
-    
+
     if (!accessToken) {
       addLog('❌ Authentication token not available. Please sign in again.');
       return;
     }
-    
+
     setIsLoading(true);
     setLogs([]);
     setComments([]);
@@ -60,12 +61,12 @@ export default function Home() {
       addLog('1. Fetching webpage content...');
 
       addLog('2. Extracting comments and reviews...');
-      
+
       // Prepare headers with bearer token
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
       };
-      
+
       if (accessToken) {
         headers['Authorization'] = `Bearer ${accessToken}`;
         addLog('🔐 Using authenticated request...');
@@ -75,10 +76,10 @@ export default function Home() {
 
       // Make the API call to the new endpoint with title and url
       const response = await axios.post<CommentResponse>(
-        `/api/gateway/fastapi/scrape-comments`, 
-        { 
+        `/api/gateway/fastapi/scrape-comments`,
+        {
           title: title,
-          url: url 
+          url: url,
         },
         { headers }
       );
@@ -120,7 +121,9 @@ export default function Home() {
         } else if (error.response?.status === 403) {
           addLog('❌ Error: Access denied. Please check your permissions.');
         } else {
-          addLog(`❌ Error: ${error.response?.data?.message || 'Failed to analyze URL. Please try again.'}`);
+          addLog(
+            `❌ Error: ${error.response?.data?.message || 'Failed to analyze URL. Please try again.'}`
+          );
         }
       } else {
         addLog('❌ Error: Failed to analyze URL. Please try again.');
@@ -138,8 +141,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          {/* Header Row */}
+          <div className="mb-6">
             <Header />
+          </div>
+
+          {/* Navigation and Auth Row */}
+          <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               {/* View Toggle */}
               <div className="flex bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -166,6 +174,11 @@ export default function Home() {
               </div>
               <ThemeToggle />
             </div>
+
+            {/* Auth Status on the right */}
+            <div className="flex items-center">
+              <AuthStatus />
+            </div>
           </div>
 
           {/* Dashboard View */}
@@ -174,24 +187,33 @@ export default function Home() {
               {!isAuthenticated && !authLoading && (
                 <div className="mb-8 p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl shadow-sm">
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-amber-600 dark:text-amber-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    <svg
+                      className="w-6 h-6 text-amber-600 dark:text-amber-400 mr-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
                     </svg>
                     <div>
                       <p className="text-amber-800 dark:text-amber-200 font-medium">
                         Please sign in to view the sentiment dashboard
                       </p>
                       <p className="text-amber-700 dark:text-amber-300 text-sm mt-1">
-                        Authentication is required to access historical sentiment data and analytics.
+                        Authentication is required to access historical sentiment data and
+                        analytics.
                       </p>
                     </div>
                   </div>
                 </div>
               )}
-              
-              {isAuthenticated && (
-                <SentimentDashboard />
-              )}
+
+              {isAuthenticated && <SentimentDashboard />}
             </div>
           )}
 
@@ -201,8 +223,18 @@ export default function Home() {
               {!isAuthenticated && !authLoading && (
                 <div className="mb-8 p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl shadow-sm">
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-amber-600 dark:text-amber-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    <svg
+                      className="w-6 h-6 text-amber-600 dark:text-amber-400 mr-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
                     </svg>
                     <div>
                       <p className="text-amber-800 dark:text-amber-200 font-medium">
@@ -215,13 +247,23 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              
+
               {isAuthenticated && (
                 <div className="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl shadow-sm">
                   <div className="flex items-center">
                     <div className="w-10 h-10 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mr-4">
-                      <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-5 h-5 text-green-600 dark:text-green-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     </div>
                     <div>
@@ -235,58 +277,73 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              
+
               <div className="mb-8">
-                <URLInput 
-                  url={url} 
-                  setUrl={setUrl} 
-                  title={title} 
-                  setTitle={setTitle} 
-                  onSubmit={handleSubmit} 
-                  isLoading={isLoading} 
+                <URLInput
+                  url={url}
+                  setUrl={setUrl}
+                  title={title}
+                  setTitle={setTitle}
+                  onSubmit={handleSubmit}
+                  isLoading={isLoading}
                 />
               </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-6">
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-                  <ProgressLogs logs={logs} />
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                    <ProgressLogs logs={logs} />
+                  </div>
+
+                  {comments.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+                      <Comments comments={comments} setStats={setStats} accessToken={accessToken} />
+                    </div>
+                  )}
+
+                  {isLoading && comments.length === 0 && (
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
+                      <div className="text-center">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4">
+                          <svg
+                            className="animate-spin h-8 w-8 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                          Analyzing Content
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400">
+                          Fetching and analyzing comments for sentiment insights...
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {comments.length > 0 && (
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-                    <Comments comments={comments} setStats={setStats} accessToken={accessToken} />
-                  </div>
-                )}
-
-                {isLoading && comments.length === 0 && (
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
-                    <div className="text-center">
-                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4">
-                        <svg className="animate-spin h-8 w-8 text-white" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                        Analyzing Content
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        Fetching and analyzing comments for sentiment insights...
-                      </p>
+                  <div className="lg:col-span-1">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 sticky top-8">
+                      <LiveSentimentStats stats={stats} />
                     </div>
                   </div>
                 )}
               </div>
-
-              {comments.length > 0 && (
-                <div className="lg:col-span-1">
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 sticky top-8">
-                    <LiveSentimentStats stats={stats} />
-                  </div>
-                </div>
-              )}
-            </div>
             </>
           )}
         </div>

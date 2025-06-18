@@ -6,10 +6,10 @@ type Props = {
 
 export function ProgressLogs({ logs }: Props) {
   const [expanded, setExpanded] = useState(false);
-  
+
   // Show only the latest log when minimized, or all logs when expanded
   const displayLogs = expanded ? logs : logs.length > 0 ? [logs[logs.length - 1]] : [];
-  
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">

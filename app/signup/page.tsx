@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { signUpSchema, SignUpFormData } from '@/utils/validation'
-import { signUpUser } from '@/utils/auth'
-import { signIn } from 'next-auth/react'
-import Link from 'next/link'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signUpSchema, SignUpFormData } from '@/utils/validation';
+import { signUpUser } from '@/utils/auth';
+import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function SignUpForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const router = useRouter();
 
   const {
     register,
@@ -21,44 +21,44 @@ export default function SignUpForm() {
     formState: { errors },
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
-  })
+  });
 
   const onSubmit = async (data: SignUpFormData) => {
-    setIsLoading(true)
-    setError('')
-    setSuccess('')
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
 
     try {
-      const result = await signUpUser(data)
+      const result = await signUpUser(data);
 
       if (result.success) {
-        setSuccess('Account created successfully! Signing you in...')
-        
+        setSuccess('Account created successfully! Signing you in...');
+
         // Automatically sign in the user after successful registration
         const signInResult = await signIn('credentials', {
           emailOrUsername: data.email,
           password: data.password,
           redirect: false,
-        })
+        });
 
         if (signInResult?.ok) {
           // Redirect to dashboard or home page after successful sign in
-          router.push('/')
+          router.push('/');
         } else {
-          setError('Account created but sign in failed. Please try signing in manually.')
+          setError('Account created but sign in failed. Please try signing in manually.');
           setTimeout(() => {
-            router.push('/signin')
-          }, 2000)
+            router.push('/signin');
+          }, 2000);
         }
       } else {
-        setError(result.message || 'Registration failed')
+        setError(result.message || 'Registration failed');
       }
     } catch {
-      setError('An error occurred. Please try again.')
+      setError('An error occurred. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -80,7 +80,10 @@ export default function SignUpForm() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Full Name
               </label>
               <input
@@ -91,14 +94,15 @@ export default function SignUpForm() {
                 placeholder="Enter your full name"
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                  {errors.name.message}
-                </p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Email Address
               </label>
               <input
@@ -116,7 +120,10 @@ export default function SignUpForm() {
             </div>
 
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Username
               </label>
               <input
@@ -134,7 +141,10 @@ export default function SignUpForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Password
               </label>
               <input
@@ -152,7 +162,10 @@ export default function SignUpForm() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Confirm Password
               </label>
               <input
@@ -205,5 +218,5 @@ export default function SignUpForm() {
         </form>
       </div>
     </div>
-  )
+  );
 }

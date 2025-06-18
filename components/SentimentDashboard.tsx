@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   BarChart,
@@ -14,7 +14,7 @@ import {
   Cell,
   LineChart,
   Line,
-  ComposedChart
+  ComposedChart,
 } from 'recharts';
 import { useState } from 'react';
 
@@ -54,20 +54,50 @@ const mockHourlyData = [
 ];
 
 const mockTopArticles = [
-  { title: 'الانتخابات الرئاسية المقبلة في المغرب', comments: 1245, positive: 35, negative: 45, neutral: 20 },
-  { title: 'فوز المنتخب المغربي في كأس الأمم الأفريقية', comments: 2145, positive: 78, negative: 12, neutral: 10 },
-  { title: 'الوضع الاقتصادي الحالي والتضخم', comments: 987, positive: 25, negative: 55, neutral: 20 },
-  { title: 'تطورات الذكاء الاصطناعي في المغرب', comments: 756, positive: 68, negative: 15, neutral: 17 },
-  { title: 'المهرجان الدولي للفيلم بمراكش', comments: 623, positive: 52, negative: 22, neutral: 26 },
+  {
+    title: 'الانتخابات الرئاسية المقبلة في المغرب',
+    comments: 1245,
+    positive: 35,
+    negative: 45,
+    neutral: 20,
+  },
+  {
+    title: 'فوز المنتخب المغربي في كأس الأمم الأفريقية',
+    comments: 2145,
+    positive: 78,
+    negative: 12,
+    neutral: 10,
+  },
+  {
+    title: 'الوضع الاقتصادي الحالي والتضخم',
+    comments: 987,
+    positive: 25,
+    negative: 55,
+    neutral: 20,
+  },
+  {
+    title: 'تطورات الذكاء الاصطناعي في المغرب',
+    comments: 756,
+    positive: 68,
+    negative: 15,
+    neutral: 17,
+  },
+  {
+    title: 'المهرجان الدولي للفيلم بمراكش',
+    comments: 623,
+    positive: 52,
+    negative: 22,
+    neutral: 26,
+  },
 ];
 
 // Add trending topics data
 const mockTrendingTopics = [
-  { topic: '#المغرب', mentions: 1250},
-  { topic: '#هسبريس', mentions: 980},
-  { topic: '#الرباط', mentions: 750},
-  { topic: '#كأس_لأمم', mentions: 650},
-  { topic: '#الاقتصاد', mentions: 520},
+  { topic: '#المغرب', mentions: 1250 },
+  { topic: '#هسبريس', mentions: 980 },
+  { topic: '#الرباط', mentions: 750 },
+  { topic: '#كأس_لأمم', mentions: 650 },
+  { topic: '#الاقتصاد', mentions: 520 },
 ];
 
 // Add geographic data
@@ -79,7 +109,6 @@ const mockGeographicData = [
   { region: 'طنجة', comments: 210, avgSentiment: 0.0 },
 ];
 
-
 interface SentimentDashboardProps {
   className?: string;
 }
@@ -90,9 +119,15 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
 
   // Calculate summary stats
   const totalComments = mockSentimentData.reduce((sum, day) => sum + day.total, 0);
-  const avgPositive = Math.round(mockSentimentData.reduce((sum, day) => sum + day.positive, 0) / mockSentimentData.length);
-  const avgNegative = Math.round(mockSentimentData.reduce((sum, day) => sum + day.negative, 0) / mockSentimentData.length);
-  const avgNeutral = Math.round(mockSentimentData.reduce((sum, day) => sum + day.neutral, 0) / mockSentimentData.length);
+  const avgPositive = Math.round(
+    mockSentimentData.reduce((sum, day) => sum + day.positive, 0) / mockSentimentData.length
+  );
+  const avgNegative = Math.round(
+    mockSentimentData.reduce((sum, day) => sum + day.negative, 0) / mockSentimentData.length
+  );
+  const avgNeutral = Math.round(
+    mockSentimentData.reduce((sum, day) => sum + day.neutral, 0) / mockSentimentData.length
+  );
 
   const pieData = [
     { name: 'Positive', value: avgPositive, color: '#10B981' },
@@ -112,21 +147,21 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
             Real-time sentiment analysis of comments and articles
           </p>
         </div>
-        
+
         <div className="flex gap-2">
-          <select 
+          <select
             value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value)}
+            onChange={e => setTimeRange(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
           >
             <option value="24hours">Last 24 Hours</option>
             <option value="7days">Last 7 Days</option>
             <option value="30days">Last 30 Days</option>
           </select>
-          
-          <select 
+
+          <select
             value={selectedMetric}
-            onChange={(e) => setSelectedMetric(e.target.value)}
+            onChange={e => setSelectedMetric(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
           >
             <option value="all">All Metrics</option>
@@ -142,11 +177,23 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Comments</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalComments.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {totalComments.toLocaleString()}
+              </p>
             </div>
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              <svg
+                className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
               </svg>
             </div>
           </div>
@@ -156,11 +203,23 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Positive</p>
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{avgPositive}%</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {avgPositive}%
+              </p>
             </div>
             <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-6 h-6 text-green-600 dark:text-green-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
           </div>
@@ -173,8 +232,18 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">{avgNegative}%</p>
             </div>
             <div className="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-6 h-6 text-red-600 dark:text-red-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9.172 16.172a4 4 0 015.656 0M9 10h1.01M15 10h1.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
           </div>
@@ -187,8 +256,18 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
               <p className="text-2xl font-bold text-gray-600 dark:text-gray-400">{avgNeutral}%</p>
             </div>
             <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-6 h-6 text-gray-600 dark:text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
           </div>
@@ -205,25 +284,45 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={mockSentimentData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis 
-                dataKey="date" 
+              <XAxis
+                dataKey="date"
                 stroke="#6B7280"
                 fontSize={12}
-                tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                tickFormatter={value =>
+                  new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                }
               />
               <YAxis stroke="#6B7280" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
                   border: '1px solid #374151',
                   borderRadius: '8px',
-                  color: '#F9FAFB'
+                  color: '#F9FAFB',
                 }}
               />
               <Legend />
-              <Line type="monotone" dataKey="positive" stroke="#10B981" strokeWidth={3} name="Positive" />
-              <Line type="monotone" dataKey="negative" stroke="#EF4444" strokeWidth={3} name="Negative" />
-              <Line type="monotone" dataKey="neutral" stroke="#6B7280" strokeWidth={3} name="Neutral" />
+              <Line
+                type="monotone"
+                dataKey="positive"
+                stroke="#10B981"
+                strokeWidth={3}
+                name="Positive"
+              />
+              <Line
+                type="monotone"
+                dataKey="negative"
+                stroke="#EF4444"
+                strokeWidth={3}
+                name="Negative"
+              />
+              <Line
+                type="monotone"
+                dataKey="neutral"
+                stroke="#6B7280"
+                strokeWidth={3}
+                name="Neutral"
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -249,12 +348,12 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
                   border: '1px solid #374151',
                   borderRadius: '8px',
-                  color: '#F9FAFB'
+                  color: '#F9FAFB',
                 }}
               />
             </PieChart>
@@ -269,8 +368,8 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={mockCategoryData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis 
-                dataKey="category" 
+              <XAxis
+                dataKey="category"
                 stroke="#6B7280"
                 fontSize={12}
                 angle={-45}
@@ -278,12 +377,12 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
                 height={80}
               />
               <YAxis stroke="#6B7280" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
                   border: '1px solid #374151',
                   borderRadius: '8px',
-                  color: '#F9FAFB'
+                  color: '#F9FAFB',
                 }}
               />
               <Legend />
@@ -305,23 +404,23 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
               <XAxis dataKey="hour" stroke="#6B7280" fontSize={12} />
               <YAxis yAxisId="left" stroke="#6B7280" fontSize={12} />
               <YAxis yAxisId="right" orientation="right" stroke="#6B7280" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
                   border: '1px solid #374151',
                   borderRadius: '8px',
-                  color: '#F9FAFB'
+                  color: '#F9FAFB',
                 }}
               />
               <Legend />
               <Bar yAxisId="left" dataKey="comments" fill="#3B82F6" name="Comments Count" />
-              <Line 
-                yAxisId="right" 
-                type="monotone" 
-                dataKey="sentiment" 
-                stroke="#F59E0B" 
-                strokeWidth={3} 
-                name="Avg Sentiment" 
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="sentiment"
+                stroke="#F59E0B"
+                strokeWidth={3}
+                name="Avg Sentiment"
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -332,46 +431,41 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             الموضوعات الرائجة
           </h3>
-        
-<ResponsiveContainer width="100%" height={300}>
-  <BarChart
-    layout="vertical"  // ✅ This is the key!
-    data={mockTrendingTopics}
-  >
-    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-    <XAxis
-      type="number"
-      dataKey="mentions"
-      stroke="#6B7280"
-      fontSize={12}
-      tickFormatter={(value) => `${value.toLocaleString()}`}
-    />
-    <YAxis
-      type="category"
-      dataKey="topic"
-      stroke="#6B7280"
-      fontSize={12}
-      width={100} // ✅ May need more width for Arabic hashtags
-      interval={0}
-    />
-    <Tooltip
-      contentStyle={{
-        backgroundColor: '#1F2937',
-        border: '1px solid #374151',
-        borderRadius: '8px',
-        color: '#F9FAFB'
-      }}
-      formatter={(value) => [`${value.toLocaleString()} mentions`, 'إجمالي الذكر']}
-      labelFormatter={(label) => `الموضوع: ${label}`}
-    />
-    <Bar
-      dataKey="mentions"
-      fill="#8B5CF6"
-      name="عدد الذكر"
-      radius={[0, 6, 6, 0]}
-    />
-  </BarChart>
-</ResponsiveContainer>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              layout="vertical" // ✅ This is the key!
+              data={mockTrendingTopics}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis
+                type="number"
+                dataKey="mentions"
+                stroke="#6B7280"
+                fontSize={12}
+                tickFormatter={value => `${value.toLocaleString()}`}
+              />
+              <YAxis
+                type="category"
+                dataKey="topic"
+                stroke="#6B7280"
+                fontSize={12}
+                width={100} // ✅ May need more width for Arabic hashtags
+                interval={0}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
+                  border: '1px solid #374151',
+                  borderRadius: '8px',
+                  color: '#F9FAFB',
+                }}
+                formatter={value => [`${value.toLocaleString()} mentions`, 'إجمالي الذكر']}
+                labelFormatter={label => `الموضوع: ${label}`}
+              />
+              <Bar dataKey="mentions" fill="#8B5CF6" name="عدد الذكر" radius={[0, 6, 6, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
         {/* Geographic Distribution */}
@@ -382,8 +476,8 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <ResponsiveContainer width="100%" height={300}>
             <ComposedChart data={mockGeographicData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis 
-                dataKey="region" 
+              <XAxis
+                dataKey="region"
                 stroke="#6B7280"
                 fontSize={12}
                 angle={-45}
@@ -392,23 +486,23 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
               />
               <YAxis yAxisId="left" stroke="#6B7280" fontSize={12} />
               <YAxis yAxisId="right" orientation="right" stroke="#6B7280" fontSize={12} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
                   border: '1px solid #374151',
                   borderRadius: '8px',
-                  color: '#F9FAFB'
+                  color: '#F9FAFB',
                 }}
               />
               <Legend />
               <Bar yAxisId="left" dataKey="comments" fill="#8B5CF6" name="عدد التعليقات" />
-              <Line 
-                yAxisId="right" 
-                type="monotone" 
-                dataKey="avgSentiment" 
-                stroke="#F59E0B" 
-                strokeWidth={3} 
-                name="متوسط المشاعر" 
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="avgSentiment"
+                stroke="#F59E0B"
+                strokeWidth={3}
+                name="متوسط المشاعر"
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -426,7 +520,7 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
             مباشر
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {mockTrendingTopics.map((topic, index) => (
             <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -436,9 +530,7 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
               <div className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                 {topic.mentions.toLocaleString()}
               </div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">
-                mentions
-              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">mentions</div>
             </div>
           ))}
         </div>
@@ -453,20 +545,39 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
           <table className="w-full text-sm text-left">
             <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th scope="col" className="px-6 py-3">Article Title</th>
-                <th scope="col" className="px-6 py-3">Comments</th>
-                <th scope="col" className="px-6 py-3">Positive %</th>
-                <th scope="col" className="px-6 py-3">Negative %</th>
-                <th scope="col" className="px-6 py-3">Neutral %</th>
-                <th scope="col" className="px-6 py-3">Sentiment</th>
+                <th scope="col" className="px-6 py-3">
+                  Article Title
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Comments
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Positive %
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Negative %
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Neutral %
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Sentiment
+                </th>
               </tr>
             </thead>
             <tbody>
               {mockTopArticles.map((article, index) => {
-                const sentiment = article.positive > article.negative ? 'positive' : 
-                                article.negative > article.positive ? 'negative' : 'neutral';
+                const sentiment =
+                  article.positive > article.negative
+                    ? 'positive'
+                    : article.negative > article.positive
+                      ? 'negative'
+                      : 'neutral';
                 return (
-                  <tr key={index} className="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                  <tr
+                    key={index}
+                    className="bg-white dark:bg-gray-800 border-b dark:border-gray-700"
+                  >
                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                       {article.title}
                     </td>
@@ -483,13 +594,15 @@ export const SentimentDashboard = ({ className = '' }: SentimentDashboardProps) 
                       {article.neutral}%
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        sentiment === 'positive' 
-                          ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300'
-                          : sentiment === 'negative'
-                          ? 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          sentiment === 'positive'
+                            ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300'
+                            : sentiment === 'negative'
+                              ? 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+                        }`}
+                      >
                         {sentiment}
                       </span>
                     </td>

@@ -26,7 +26,7 @@ export interface Comment {
   url: string;
   publishDate: string;
   scrapedAt: string;
-  sentiment: "POSITIVE" | "NEGATIVE" | "NEUTRAL";
+  sentiment: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL';
   confidenceScore: number;
   isProcessed: boolean;
   createdAt: string;
@@ -64,7 +64,7 @@ export interface CommentResponse {
 export interface SentimentAnalysisResult {
   id: string;
   modelName: string;
-  sentiment: "POSITIVE" | "NEGATIVE" | "NEUTRAL";
+  sentiment: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL';
   confidenceScore: number;
   positiveScore: number;
   negativeScore: number;

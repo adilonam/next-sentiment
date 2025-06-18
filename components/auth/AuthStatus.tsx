@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useSession, signOut } from 'next-auth/react'
-import Link from 'next/link'
+import { useSession, signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function AuthStatus() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
   if (status === 'loading') {
     return (
@@ -12,7 +12,7 @@ export default function AuthStatus() {
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 dark:border-white"></div>
         <span className="text-sm">Loading...</span>
       </div>
-    )
+    );
   }
 
   if (session) {
@@ -31,7 +31,7 @@ export default function AuthStatus() {
           Sign out
         </button>
       </div>
-    )
+    );
   }
 
   return (
@@ -49,5 +49,5 @@ export default function AuthStatus() {
         Sign up
       </Link>
     </div>
-  )
+  );
 }

@@ -25,7 +25,12 @@ export function URLInput({ url, setUrl, title, setTitle, onSubmit, isLoading }: 
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mb-4">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            />
           </svg>
         </div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -41,11 +46,13 @@ export function URLInput({ url, setUrl, title, setTitle, onSubmit, isLoading }: 
         {/* Input Fields */}
         <div className="space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               Article Title
             </label>
             <div className="relative">
-   
               <input
                 id="title"
                 type="text"
@@ -60,11 +67,13 @@ export function URLInput({ url, setUrl, title, setTitle, onSubmit, isLoading }: 
           </div>
 
           <div>
-            <label htmlFor="url" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="url"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               Website URL
             </label>
             <div className="relative">
-         
               <input
                 id="url"
                 type="url"
@@ -80,9 +89,9 @@ export function URLInput({ url, setUrl, title, setTitle, onSubmit, isLoading }: 
         </div>
 
         {/* Submit Button */}
-        <button 
-          type="submit" 
-          disabled={isLoading || !title.trim() || !url.trim()} 
+        <button
+          type="submit"
+          disabled={isLoading || !title.trim() || !url.trim()}
           className="btn btn-primary w-full py-4 text-lg font-semibold"
         >
           {isLoading ? (
@@ -112,7 +121,12 @@ export function URLInput({ url, setUrl, title, setTitle, onSubmit, isLoading }: 
           ) : (
             <span className="flex items-center justify-center">
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
               </svg>
               Analyze Sentiment
             </span>
@@ -137,7 +151,12 @@ export function URLInput({ url, setUrl, title, setTitle, onSubmit, isLoading }: 
         >
           <span className="flex items-center justify-center">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             Try with Example Article
           </span>

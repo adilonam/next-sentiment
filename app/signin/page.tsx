@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { signInSchema, SignInFormData } from '@/utils/validation'
-import Link from 'next/link'
+import { useState } from 'react';
+import { signIn, getSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signInSchema, SignInFormData } from '@/utils/validation';
+import Link from 'next/link';
 
 export default function SignInForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const {
     register,
@@ -19,37 +19,37 @@ export default function SignInForm() {
     formState: { errors },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
-  })
+  });
 
   const onSubmit = async (data: SignInFormData) => {
-    setIsLoading(true)
-    setError('')
+    setIsLoading(true);
+    setError('');
 
     try {
       const result = await signIn('credentials', {
         emailOrUsername: data.emailOrUsername,
         password: data.password,
         redirect: false,
-      })
+      });
 
       if (result?.error) {
-        setError('Invalid email/username or password')
+        setError('Invalid email/username or password');
       } else {
         // Check if session was created successfully
-        const session = await getSession()
+        const session = await getSession();
         if (session) {
-          router.push('/')
-          router.refresh()
+          router.push('/');
+          router.refresh();
         } else {
-          setError('Sign in failed. Please try again.')
+          setError('Sign in failed. Please try again.');
         }
       }
     } catch {
-      setError('An error occurred. Please try again.')
+      setError('An error occurred. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -131,5 +131,5 @@ export default function SignInForm() {
         </form>
       </div>
     </div>
-  )
+  );
 }

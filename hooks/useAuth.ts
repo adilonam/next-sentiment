@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react';
 
 export function useAuth() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
   return {
     user: session?.user,
@@ -11,5 +11,5 @@ export function useAuth() {
     isAuthenticated: !!session,
     accessToken: session?.accessToken,
     refreshToken: session?.refreshToken,
-  }
+  };
 }
