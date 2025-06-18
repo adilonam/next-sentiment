@@ -112,17 +112,17 @@ export const authOptions = {
     CredentialsProvider({
       name: 'credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        emailOrUsername: { label: 'Email or Username', type: 'text' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.emailOrUsername || !credentials?.password) {
           return null
         }
 
         try {
           const response = await axios.post(`${process.env.BACKEND_API_URL}/api/auth/login`, {
-            username: credentials.email,
+            username: credentials.emailOrUsername,
             password: credentials.password,
           }, {
             headers: {

@@ -27,13 +27,13 @@ export default function SignInForm() {
 
     try {
       const result = await signIn('credentials', {
-        email: data.email,
+        emailOrUsername: data.emailOrUsername,
         password: data.password,
         redirect: false,
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        setError('Invalid email/username or password')
       } else {
         // Check if session was created successfully
         const session = await getSession()
@@ -61,7 +61,7 @@ export default function SignInForm() {
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Or{' '}
             <Link
-              href="/auth/signup"
+              href="/signup"
               className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
             >
               create a new account
@@ -71,19 +71,19 @@ export default function SignInForm() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
+              <label htmlFor="emailOrUsername" className="sr-only">
+                Email or Username
               </label>
               <input
-                {...register('email')}
-                type="email"
-                autoComplete="email"
+                {...register('emailOrUsername')}
+                type="text"
+                autoComplete="username"
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                placeholder="Email or username"
               />
-              {errors.email && (
+              {errors.emailOrUsername && (
                 <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                  {errors.email.message}
+                  {errors.emailOrUsername.message}
                 </p>
               )}
             </div>

@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signUpSchema, SignUpFormData } from '@/utils/validation'
 import { signUpUser } from '@/utils/auth'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 
 export default function SignUpForm() {
@@ -31,11 +32,24 @@ export default function SignUpForm() {
       const result = await signUpUser(data)
 
       if (result.success) {
-        setSuccess('Account created successfully! Please sign in.')
-        // Redirect to sign in page after a short delay
-        setTimeout(() => {
-          router.push('/auth/signin')
-        }, 2000)
+        setSuccess('Account created successfully! Signing you in...')
+        
+        // Automatically sign in the user after successful registration
+        const signInResult = await signIn('credentials', {
+          emailOrUsername: data.email,
+          password: data.password,
+          redirect: false,
+        })
+
+        if (signInResult?.ok) {
+          // Redirect to dashboard or home page after successful sign in
+          router.push('/')
+        } else {
+          setError('Account created but sign in failed. Please try signing in manually.')
+          setTimeout(() => {
+            router.push('/signin')
+          }, 2000)
+        }
       } else {
         setError(result.message || 'Registration failed')
       }
@@ -56,7 +70,7 @@ export default function SignUpForm() {
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Or{' '}
             <Link
-              href="/auth/signin"
+              href="/signin"
               className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
             >
               sign in to your existing account
@@ -97,6 +111,24 @@ export default function SignUpForm() {
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                   {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Username
+              </label>
+              <input
+                {...register('username')}
+                type="text"
+                autoComplete="username"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Choose a username"
+              />
+              {errors.username && (
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.username.message}
                 </p>
               )}
             </div>
