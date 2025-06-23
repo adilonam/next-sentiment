@@ -106,31 +106,56 @@ export const CommentSentiment = ({ comment, setStats, accessToken }: CommentSent
 
   return (
     <div className="mt-2">
-      <div className="flex flex-col items-center space-x-2">
+      <div className="flex flex-col items-center sm:items-start space-y-2">
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSentimentColor(sentiment.sentimentAnalysisResult.sentiment.toLowerCase())}`}
         >
           {sentiment.sentimentAnalysisResult.sentiment.toUpperCase()}
         </span>
-        <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
-          <div className="flex items-center">
-            <span className="font-medium mr-1">Confidence:</span>
-            <span>{Math.round(sentiment.sentimentAnalysisResult.confidenceScore * 100)}%</span>
+        
+        {/* Mobile: 2 columns, Desktop: single row */}
+        <div className="w-full">
+          {/* Desktop layout - single row */}
+          <div className="hidden sm:flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Confidence:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.confidenceScore * 100)}%</span>
+            </div>
+            <span className="mx-1">•</span>
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Positive:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.positiveScore * 100)}%</span>
+            </div>
+            <span className="mx-1">•</span>
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Negative:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.negativeScore * 100)}%</span>
+            </div>
+            <span className="mx-1">•</span>
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Neutral:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.neutralScore * 100)}%</span>
+            </div>
           </div>
-          <span className="mx-1">•</span>
-          <div className="flex items-center">
-            <span className="font-medium mr-1">Positive:</span>
-            <span>{Math.round(sentiment.sentimentAnalysisResult.positiveScore * 100)}%</span>
-          </div>
-          <span className="mx-1">•</span>
-          <div className="flex items-center">
-            <span className="font-medium mr-1">Negative:</span>
-            <span>{Math.round(sentiment.sentimentAnalysisResult.negativeScore * 100)}%</span>
-          </div>
-          <span className="mx-1">•</span>
-          <div className="flex items-center">
-            <span className="font-medium mr-1">Neutral:</span>
-            <span>{Math.round(sentiment.sentimentAnalysisResult.neutralScore * 100)}%</span>
+          
+          {/* Mobile layout - 2 columns */}
+          <div className="sm:hidden grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Confidence:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.confidenceScore * 100)}%</span>
+            </div>
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Positive:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.positiveScore * 100)}%</span>
+            </div>
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Negative:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.negativeScore * 100)}%</span>
+            </div>
+            <div className="flex items-center">
+              <span className="font-medium mr-1">Neutral:</span>
+              <span>{Math.round(sentiment.sentimentAnalysisResult.neutralScore * 100)}%</span>
+            </div>
           </div>
         </div>
       </div>

@@ -147,36 +147,44 @@ export default function Home() {
           </div>
 
           {/* Navigation and Auth Row */}
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               {/* View Toggle */}
-              <div className="flex bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="flex bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-200 dark:border-gray-700 w-full sm:w-auto">
                 <button
                   onClick={() => setActiveView('dashboard')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors ${
                     activeView === 'dashboard'
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
-                  📊 Dashboard
+                  <span className="sm:hidden">📊</span>
+                  <span className="hidden sm:inline">📊 Dashboard</span>
                 </button>
                 <button
                   onClick={() => setActiveView('analyzer')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors ${
                     activeView === 'analyzer'
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
-                  🔍 Analyzer
+                  <span className="sm:hidden">🔍</span>
+                  <span className="hidden sm:inline">🔍 Analyzer</span>
                 </button>
               </div>
-              <ThemeToggle />
+              <div className="flex justify-between sm:justify-start items-center">
+                <ThemeToggle />
+                {/* Auth Status on mobile - shown inline with theme toggle */}
+                <div className="sm:hidden">
+                  <AuthStatus />
+                </div>
+              </div>
             </div>
 
-            {/* Auth Status on the right */}
-            <div className="flex items-center">
+            {/* Auth Status on desktop - shown on the right */}
+            <div className="hidden sm:flex items-center">
               <AuthStatus />
             </div>
           </div>
